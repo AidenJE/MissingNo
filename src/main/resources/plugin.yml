@@ -1,0 +1,6 @@
+name: MissingNo
+description: Hi Gavin!
+author: Aiden
+version: 1.0
+main: one.lunchclub.MissingNo
+api-version: 1.17
