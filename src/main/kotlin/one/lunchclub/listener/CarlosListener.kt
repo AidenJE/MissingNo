@@ -13,8 +13,7 @@ class CarlosListener(private val plugin: MissingNo) : Listener {
         val carlosUniqueId = "5aac6576-86f7-468a-8f27-2d3c3aac74d7"
         val playerUniqueId = player.uniqueId.toString()
 
-        //return playerUniqueId == carlosUniqueId
-        return true
+        return playerUniqueId == carlosUniqueId
     }
 
     @EventHandler
