@@ -1,6 +1,7 @@
 package one.lunchclub
 
 import one.lunchclub.listener.CarlosListener
+import one.lunchclub.listener.SvenListener
 import org.bukkit.plugin.java.JavaPlugin
 
 class MissingNo : JavaPlugin() {
@@ -8,5 +9,6 @@ class MissingNo : JavaPlugin() {
         saveDefaultConfig()
 
         server.pluginManager.registerEvents(CarlosListener(this), this)
+        server.pluginManager.registerEvents(SvenListener(this), this)
     }
 }
