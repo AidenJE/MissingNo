@@ -4,3 +4,16 @@ author: Aiden
 version: 1.0
 main: one.lunchclub.MissingNo
 api-version: 1.17
+
+commands:
+  missingno:
+    description: MissingNo info
+    usage: /missingno
+
+permissions:
+  missingno.get:
+    default: false
+    description: Get MissingNo config value
+  missingno.set:
+    default: false
+    description: Set MissingNo config value
