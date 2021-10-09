@@ -19,9 +19,9 @@ class SvenListener(private val plugin: MissingNo) : Listener {
         val attacker = event.damager
         val victim = event.entity
 
-        if (victim is Wolf && victim.name == "Sven") {
+        if (victim is Wolf && victim.name == "Sven" && !victim.isAngry) {
             if (attacker is Player)
-                attacker.sendMessage("<Sven>${ChatColor.RED}${ChatColor.ITALIC} Bark")
+                attacker.playSound(attacker.location, Sound.ENTITY_ENDER_DRAGON_GROWL, 50.0f, 50.0f)
             if (attacker is Damageable)
                 attacker.health = 0.0
         }
@@ -33,7 +33,7 @@ class SvenListener(private val plugin: MissingNo) : Listener {
         val entity = event.entity
 
         if (entity is Wolf && entity.name == "Sven") {
-            if (event.cause != EntityDamageEvent.DamageCause.VOID)
+            if (event.cause != EntityDamageEvent.DamageCause.VOID && !entity.isAngry)
                 event.isCancelled = true
         }
     }
