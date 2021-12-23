@@ -16,7 +16,6 @@ class CarlosListener(private val plugin: MissingNo) : Listener {
         return playerUniqueId == carlosUniqueId
     }
 
-    // Give Carlos insane knockback powers
     @EventHandler
     fun onAttack(event: EntityDamageByEntityEvent) {
         val attacker = event.damager

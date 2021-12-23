@@ -1,6 +1,12 @@
 name: MissingNo
-description: Hi Gavin!
+description: Lunch Club specific shenanigans.
 author: Aiden
-version: 1.1.1
+version: 1.3.0
 main: one.lunchclub.MissingNo
-api-version: 1.17
+api-version: 1.18
+
+commands:
+  name:
+    description: Set your name for the chat listener
+    usage: /name <name>
+    permission: missingno.name

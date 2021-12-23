@@ -1,2 +1,5 @@
+whitelist:
+  url: "jdbc:mysql://localhost:3306/db?user=name&password=pass"
+
 carlos:
-  knockback: 10 # Carlos's punch knockback multiplier
+  knockback: 21 # Carlos's punch knockback multiplier
