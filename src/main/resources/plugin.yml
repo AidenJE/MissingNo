@@ -14,11 +14,7 @@ commands:
     description: View the inventory of a player
     usage: /inventory <player>
     permission: missingno.investigate
-  fbi:
-    description: View some data of a player
-    usage: /fbi <player>
-    permission: missingno.investigate
-  listfbi:
-    description: Get a list of all FBI files
-    usage: /listfbi
-    permission: missingno.investigate
+  hat:
+    description: Equip a hat
+    usage: /hat
+    permission: missingno.hat

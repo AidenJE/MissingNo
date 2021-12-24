@@ -10,12 +10,12 @@ import org.bukkit.entity.Player
 
 class NameCommand(private val plugin: MissingNo) : CommandExecutor {
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
-        if (sender is Player) {
-            if (args.isEmpty()) {
-                sender.sendMessage(Component.text("${ChatColor.RED}Correct usage: /name <name>"))
-                return false
-            }
+        if (args.isEmpty()) {
+            sender.sendMessage(Component.text("${ChatColor.RED}Correct usage: /name <name>"))
+            return false
+        }
 
+        if (sender is Player) {
             val name = args.reduce{prev, next -> "$prev $next"}
             plugin.nameManager.logNameData(sender.uniqueId, name)
             sender.sendMessage(Component.text("${ChatColor.GREEN}Updated your name to: $name"))

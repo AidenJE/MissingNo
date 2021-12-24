@@ -41,11 +41,6 @@ class DataManager(plugin: MissingNo) {
         executeUpdate("""CREATE TABLE IF NOT EXISTS player (
             |uuid VARCHAR(255) UNIQUE,
             |username VARCHAR(255),
-            |dimension VARCHAR(255),
-            |x REAL,
-            |y REAL,
-            |z REAL,
-            |health REAL,
             |last_login INTEGER,
             |inventory TEXT
             |);""".trimMargin())

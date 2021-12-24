@@ -10,9 +10,7 @@ class NameManager(private val plugin: MissingNo) {
     data class NameData(val uuid: UUID, val name: String?)
 
     fun logNameData(uuid: UUID, name: String) {
-        var isPlayerRegistered = false
-        if (getName(uuid) != null)
-            isPlayerRegistered = true
+        val isPlayerRegistered = getName(uuid) != null
 
         plugin.server.scheduler.runTaskAsynchronously(plugin, (Runnable {
             if (isPlayerRegistered) {
@@ -32,8 +30,8 @@ class NameManager(private val plugin: MissingNo) {
     }
 
     fun getName(uuid: UUID): String? {
-        val data = plugin.dataManager.executeQuery("SELECT player_name FROM name WHERE uuid = '$uuid';")
-        if (data != null)
+        val data = plugin.dataManager.executeQuery("SELECT * FROM name WHERE player_uuid = '$uuid';")
+        if (data != null && !data.isClosed && data.next())
             return resultSetToNameData(data).name
 
         return null
@@ -41,7 +39,7 @@ class NameManager(private val plugin: MissingNo) {
 
     private fun getNames(): Array<NameData> {
         val nameData: ArrayList<NameData> = ArrayList()
-        val data = plugin.dataManager.executeQuery("SELECT player_uuid, player_name FROM name;")
+        val data = plugin.dataManager.executeQuery("SELECT * FROM name;")
 
         if (data != null) {
             try {
