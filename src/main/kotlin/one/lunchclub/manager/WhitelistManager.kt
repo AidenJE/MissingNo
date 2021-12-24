@@ -79,7 +79,7 @@ class WhitelistManager(plugin: MissingNo) {
     }
 
     private fun isCodeRegistered(code: String): Boolean {
-        val data = executeQuery("SELECT COUNT(1) FROM player WHERE uuid = '$code';")
+        val data = executeQuery("SELECT COUNT(1) FROM code WHERE code = '$code';")
         if (data != null && data.next())
             return data.getBoolean(1)
 

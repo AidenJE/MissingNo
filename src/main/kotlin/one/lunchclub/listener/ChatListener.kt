@@ -15,7 +15,7 @@ class ChatListener(private val plugin: MissingNo) : Listener {
         val message = event.originalMessage()
         event.isCancelled = true
 
-        var name = plugin.nameManager.getChatName(player.uniqueId)
+        var name = plugin.nameManager.getName(player.uniqueId)
         if (name == null)
             name = player.name
 

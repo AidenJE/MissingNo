@@ -10,6 +10,7 @@ class DataManager(plugin: MissingNo) {
 
     init {
         plugin.server.scheduler.runTaskAsynchronously(plugin, (Runnable {
+            setupPlayerTable()
             setupNameTable()
         }))
     }
@@ -36,11 +37,40 @@ class DataManager(plugin: MissingNo) {
             connection.close()
     }
 
+    private fun setupPlayerTable() {
+        executeUpdate("""CREATE TABLE IF NOT EXISTS player (
+            |uuid VARCHAR(255) UNIQUE,
+            |username VARCHAR(255),
+            |dimension VARCHAR(255),
+            |x REAL,
+            |y REAL,
+            |z REAL,
+            |health REAL,
+            |last_login INTEGER,
+            |inventory TEXT
+            |);""".trimMargin())
+    }
+
     private fun setupNameTable() {
         executeUpdate("""CREATE TABLE IF NOT EXISTS name (
             |player_uuid VARCHAR(255) UNIQUE,
             |player_name VARCHAR(255)
             |);""".trimMargin())
+    }
+
+    fun prepareStatement(sql: String): PreparedStatement {
+        return connection.prepareStatement(sql)
+    }
+
+    fun executeUpdate(sql: PreparedStatement) {
+        if (!isConnected())
+            connect()
+
+        try {
+            sql.executeUpdate()
+        } catch (e: SQLException) {
+            e.printStackTrace()
+        }
     }
 
     fun executeUpdate(sql: String) {

@@ -1,42 +1,33 @@
 package one.lunchclub.listener
 
+import net.kyori.adventure.text.Component
 import one.lunchclub.MissingNo
-import one.lunchclub.manager.WhitelistManager
-import org.bukkit.Bukkit
+import org.bukkit.ChatColor
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
-import org.bukkit.event.player.PlayerLoginEvent
-import org.bukkit.event.server.PluginDisableEvent
+import org.bukkit.event.player.AsyncPlayerPreLoginEvent
 import java.util.*
 import kotlin.collections.ArrayList
 
-class WhitelistListener(plugin: MissingNo) : Listener {
-    private val crud = WhitelistManager(plugin)
-    private val registeredCache: ArrayList<UUID> = ArrayList()
+class WhitelistListener(private val plugin: MissingNo) : Listener {
+    private val whitelistCache: ArrayList<UUID> = ArrayList()
 
     @EventHandler
-    fun onPlayerLogin(event: PlayerLoginEvent) {
-        val player = event.player
-        val uuid = player.uniqueId
+    fun onPlayerLogin(event: AsyncPlayerPreLoginEvent) {
+        val uuid = event.uniqueId
 
-        if (registeredCache.contains(uuid))
+        if (whitelistCache.contains(uuid))
             return
 
-        if (!crud.isPlayerWhitelisted(uuid)) {
-            crud.registerPlayer(uuid)
-            val code = crud.getPlayerCode(uuid)
-            crud.registerCode(code, uuid)
+        if (!plugin.whitelistManager.isPlayerWhitelisted(uuid)) {
+            plugin.whitelistManager.registerPlayer(uuid)
+            val code = plugin.whitelistManager.getPlayerCode(uuid)
+            plugin.whitelistManager.registerCode(code, uuid)
 
-            val kickMessage = "You are not whitelisted. Register with the code: $code"
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "/kick ${player.name} $kickMessage") // Awful Bedrock hack
-            event.disallow(PlayerLoginEvent.Result.KICK_OTHER, kickMessage)
+            val kickMessage = "${ChatColor.RED}You are not whitelisted. Register with the code:${ChatColor.RESET} $code"
+            event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_WHITELIST, Component.text(kickMessage))
         } else {
-            registeredCache.add(uuid)
+            whitelistCache.add(uuid)
         }
-    }
-
-    @EventHandler
-    fun onDisable(event: PluginDisableEvent) {
-        crud.closeConnection()
     }
 }

@@ -1,57 +1,65 @@
 package one.lunchclub.manager
 
 import one.lunchclub.MissingNo
-import one.lunchclub.data.NameData
+import java.sql.ResultSet
 import java.sql.SQLException
 import java.util.*
 import kotlin.collections.ArrayList
 
 class NameManager(private val plugin: MissingNo) {
-    fun addNameData(uuid: UUID, name: String) {
-        val data = getNameData()
+    data class NameData(val uuid: UUID, val name: String?)
 
+    fun logNameData(uuid: UUID, name: String) {
         var isPlayerRegistered = false
-        for (player in data) {
-            if (uuid == player.uuid)
-                isPlayerRegistered = true
-        }
+        if (getName(uuid) != null)
+            isPlayerRegistered = true
 
         plugin.server.scheduler.runTaskAsynchronously(plugin, (Runnable {
             if (isPlayerRegistered) {
-                plugin.dataManager.executeUpdate("UPDATE name SET player_name = '$name' WHERE player_uuid = '$uuid';")
+                val stmt = plugin.dataManager.prepareStatement("UPDATE name SET player_name = ? WHERE player_uuid = ?")
+                stmt.setString(1, name)
+                stmt.setString(2, uuid.toString())
+
+                plugin.dataManager.executeUpdate(stmt)
             } else {
-                plugin.dataManager.executeUpdate("INSERT INTO name (player_uuid, player_name) VALUES ('$uuid', '$name');")
+                val stmt = plugin.dataManager.prepareStatement("INSERT INTO name (player_uuid, player_name) VALUES (?, ?)")
+                stmt.setString(1, uuid.toString())
+                stmt.setString(2, name)
+
+                plugin.dataManager.executeUpdate(stmt)
             }
         }))
     }
 
-    fun getChatName(uuid: UUID): String? {
-        val data = getNameData()
-
-        for (player in data) {
-            if (uuid == player.uuid)
-                return player.name
-        }
+    fun getName(uuid: UUID): String? {
+        val data = plugin.dataManager.executeQuery("SELECT player_name FROM name WHERE uuid = '$uuid';")
+        if (data != null)
+            return resultSetToNameData(data).name
 
         return null
     }
 
-    private fun getNameData(): ArrayList<NameData> {
+    private fun getNames(): Array<NameData> {
         val nameData: ArrayList<NameData> = ArrayList()
         val data = plugin.dataManager.executeQuery("SELECT player_uuid, player_name FROM name;")
 
         if (data != null) {
             try {
                 while (data.next()) {
-                    val uuid = UUID.fromString(data.getString("player_uuid"))
-                    val name = data.getString("player_name")
-                    nameData.add(NameData(uuid, name))
+                    nameData.add(resultSetToNameData(data))
                 }
             } catch (e: SQLException) {
                 e.printStackTrace()
             }
         }
 
-        return nameData
+        return nameData.toTypedArray()
+    }
+
+    private fun resultSetToNameData(data: ResultSet): NameData {
+        val uuid = UUID.fromString(data.getString("player_uuid"))
+        val name = data.getString("player_name")
+
+        return NameData(uuid, name)
     }
 }
