@@ -2,6 +2,8 @@ package one.lunchclub.listener
 
 import one.lunchclub.MissingNo
 import org.bukkit.Material
+import org.bukkit.Particle
+import org.bukkit.Sound
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -26,8 +28,15 @@ class CarlosListener(private val plugin: MissingNo) : Listener {
             val isPlayerAttacking = event.cause == EntityDamageEvent.DamageCause.ENTITY_ATTACK
 
             if (isPlayerHoldingNothing && isPlayerAttacking) {
+                event.isCancelled = true
+
+                attacker.world.playSound(attacker.location, Sound.ENTITY_GENERIC_EXPLODE, 50.0f, 1.0f)
+                attacker.world.spawnParticle(Particle.EXPLOSION_HUGE, attacker.location, 3)
+                attacker.world.playSound(attacker.location, Sound.ENTITY_GENERIC_EXPLODE, 50.0f, 1.0f)
+
                 val knockback = plugin.config.getDouble("carlos.knockback")
-                victim.velocity = attacker.location.direction.normalize().multiply(knockback)
+                val velocity = attacker.location.direction.normalize()
+                victim.velocity = velocity.setY(velocity.y + 0.3).multiply(knockback)
             }
         }
     }

@@ -17,7 +17,7 @@ class NameCommand(private val plugin: MissingNo) : CommandExecutor {
 
         if (sender is Player) {
             val name = args.reduce{prev, next -> "$prev $next"}
-            plugin.nameManager.logNameData(sender.uniqueId, name)
+            plugin.nameManager.logName(sender.uniqueId, name)
             sender.sendMessage(Component.text("${ChatColor.GREEN}Updated your name to: $name"))
 
             return true

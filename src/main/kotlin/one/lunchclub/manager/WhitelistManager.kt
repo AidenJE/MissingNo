@@ -1,44 +1,13 @@
 package one.lunchclub.manager
 
 import one.lunchclub.MissingNo
-import java.sql.Connection
-import java.sql.DriverManager
-import java.sql.ResultSet
-import java.sql.SQLException
 import java.util.*
 
-class WhitelistManager(plugin: MissingNo) {
-    private val url: String = plugin.config.getString("whitelist.url")!!
-    private lateinit var connection: Connection
-
-    init {
-        plugin.server.scheduler.runTaskAsynchronously(plugin, (Runnable {
-            setupPlayerTable()
-            setupCodeTable()
-        }))
-    }
-
-    private fun connect() {
-        try {
-            connection = DriverManager.getConnection(url)
-        } catch (e: SQLException) {
-            e.printStackTrace()
-        }
-    }
-
-    private fun isConnected(): Boolean {
-        return try {
-            this::connection.isInitialized && !connection.isClosed
-        } catch (e: SQLException) {
-            e.printStackTrace()
-            false
-        }
-    }
-
-    fun closeConnection() {
-        if (!connection.isClosed) {
-            connection.close()
-        }
+class WhitelistManager(plugin: MissingNo) : SQLManager(plugin) {
+    override val url: String = plugin.config.getString("whitelist.url")!!
+    override fun setupTables() {
+        setupPlayerTable()
+        setupCodeTable()
     }
 
     private fun setupPlayerTable() {
@@ -57,7 +26,10 @@ class WhitelistManager(plugin: MissingNo) {
     }
 
     fun isPlayerWhitelisted(uuid: UUID): Boolean {
-        val data = executeQuery("SELECT whitelisted FROM player WHERE uuid = '$uuid';")
+        val stmt = prepareStatement("SELECT whitelisted FROM player WHERE uuid = ?")
+        stmt.setString(1, uuid.toString())
+
+        val data = executeQuery(stmt)
         if (data != null && data.next())
             return data.getBoolean("whitelisted")
 
@@ -65,7 +37,10 @@ class WhitelistManager(plugin: MissingNo) {
     }
 
     private fun isPlayerRegistered(uuid: UUID): Boolean {
-        val data = executeQuery("SELECT COUNT(1) FROM player WHERE uuid = '$uuid';")
+        val stmt = prepareStatement("SELECT COUNT(1) FROM player WHERE uuid = ?")
+        stmt.setString(1, uuid.toString())
+
+        val data = executeQuery(stmt)
         if (data != null && data.next())
             return data.getBoolean(1)
 
@@ -73,13 +48,19 @@ class WhitelistManager(plugin: MissingNo) {
     }
 
     fun registerPlayer(uuid: UUID) {
+        val stmt = prepareStatement("INSERT INTO player (uuid) VALUES (?)")
+        stmt.setString(1, uuid.toString())
+
         if (!isPlayerRegistered(uuid)) {
-            executeUpdate("INSERT INTO player (uuid) VALUES ('$uuid');")
+            executeUpdate(stmt)
         }
     }
 
     private fun isCodeRegistered(code: String): Boolean {
-        val data = executeQuery("SELECT COUNT(1) FROM code WHERE code = '$code';")
+        val stmt = prepareStatement("SELECT COUNT(1) FROM code WHERE code = ?")
+        stmt.setString(1, code)
+
+        val data = executeQuery(stmt)
         if (data != null && data.next())
             return data.getBoolean(1)
 
@@ -87,35 +68,16 @@ class WhitelistManager(plugin: MissingNo) {
     }
 
     fun registerCode(code: String, uuid: UUID) {
+        val stmt = prepareStatement("INSERT INTO code (code, player_uuid) VALUES (?, ?)")
+        stmt.setString(1, code)
+        stmt.setString(2, uuid.toString())
+
         if (!isCodeRegistered(code)) {
-            executeUpdate("INSERT INTO code (code, player_uuid) VALUES ('$code', '$uuid');")
+            executeUpdate(stmt)
         }
     }
 
     fun getPlayerCode(uuid: UUID): String {
         return uuid.toString().reversed().uppercase().substring(0, 12)
-    }
-
-    private fun executeUpdate(sql: String) {
-        if (!isConnected())
-            connect()
-
-        try {
-            connection.createStatement().executeUpdate(sql)
-        } catch (e: SQLException) {
-            e.printStackTrace()
-        }
-    }
-
-    private fun executeQuery(sql: String): ResultSet? {
-        if (!isConnected())
-            connect()
-
-        return try {
-            connection.createStatement().executeQuery(sql)
-        } catch (e: SQLException) {
-            e.printStackTrace()
-            null
-        }
     }
 }

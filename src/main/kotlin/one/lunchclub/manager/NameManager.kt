@@ -1,19 +1,14 @@
 package one.lunchclub.manager
 
 import one.lunchclub.MissingNo
-import java.sql.ResultSet
-import java.sql.SQLException
 import java.util.*
-import kotlin.collections.ArrayList
 
 class NameManager(private val plugin: MissingNo) {
-    data class NameData(val uuid: UUID, val name: String?)
-
-    fun logNameData(uuid: UUID, name: String) {
-        val isPlayerRegistered = getName(uuid) != null
+    fun logName(uuid: UUID, name: String) {
+        val isRegistered = isPlayerRegistered(uuid)
 
         plugin.server.scheduler.runTaskAsynchronously(plugin, (Runnable {
-            if (isPlayerRegistered) {
+            if (isRegistered) {
                 val stmt = plugin.dataManager.prepareStatement("UPDATE name SET player_name = ? WHERE player_uuid = ?")
                 stmt.setString(1, name)
                 stmt.setString(2, uuid.toString())
@@ -29,35 +24,25 @@ class NameManager(private val plugin: MissingNo) {
         }))
     }
 
+    private fun isPlayerRegistered(uuid: UUID): Boolean {
+        val stmt = plugin.dataManager.prepareStatement("SELECT COUNT(1) FROM Name WHERE player_uuid = ?")
+        stmt.setString(1, uuid.toString())
+
+        val data = plugin.dataManager.executeQuery(stmt)
+        if (data != null && data.next())
+            return data.getBoolean(1)
+
+        return false
+    }
+
     fun getName(uuid: UUID): String? {
-        val data = plugin.dataManager.executeQuery("SELECT * FROM name WHERE player_uuid = '$uuid';")
+        val stmt = plugin.dataManager.prepareStatement("SELECT player_name FROM Name WHERE player_uuid = ?")
+        stmt.setString(1, uuid.toString())
+
+        val data = plugin.dataManager.executeQuery(stmt)
         if (data != null && !data.isClosed && data.next())
-            return resultSetToNameData(data).name
+            return data.getString("player_name")
 
         return null
-    }
-
-    private fun getNames(): Array<NameData> {
-        val nameData: ArrayList<NameData> = ArrayList()
-        val data = plugin.dataManager.executeQuery("SELECT * FROM name;")
-
-        if (data != null) {
-            try {
-                while (data.next()) {
-                    nameData.add(resultSetToNameData(data))
-                }
-            } catch (e: SQLException) {
-                e.printStackTrace()
-            }
-        }
-
-        return nameData.toTypedArray()
-    }
-
-    private fun resultSetToNameData(data: ResultSet): NameData {
-        val uuid = UUID.fromString(data.getString("player_uuid"))
-        val name = data.getString("player_name")
-
-        return NameData(uuid, name)
     }
 }
