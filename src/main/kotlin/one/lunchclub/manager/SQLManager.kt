@@ -9,9 +9,9 @@ abstract class SQLManager(plugin: MissingNo) {
     abstract fun setupTables()
 
     init {
-        plugin.server.scheduler.runTaskAsynchronously(plugin, (Runnable {
+        plugin.server.scheduler.runTaskAsynchronously(plugin, Runnable {
             setupTables()
-        }))
+        })
     }
 
     private fun connect() {

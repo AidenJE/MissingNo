@@ -1,11 +1,8 @@
 package one.lunchclub
 
-import one.lunchclub.command.HatCommand
-import one.lunchclub.command.NameCommand
+import one.lunchclub.command.*
 import one.lunchclub.listener.*
-import one.lunchclub.manager.NameManager
-import one.lunchclub.manager.DataManager
-import one.lunchclub.manager.WhitelistManager
+import one.lunchclub.manager.*
 import org.bukkit.plugin.java.JavaPlugin
 
 class MissingNo : JavaPlugin() {
@@ -20,7 +17,7 @@ class MissingNo : JavaPlugin() {
     override fun onEnable() {
         dataManager = DataManager(this)
         nameManager = NameManager(this)
-        whitelistManager = WhitelistManager(this)
+        //whitelistManager = WhitelistManager(this)
 
         registerListeners()
         registerCommands()
@@ -28,11 +25,11 @@ class MissingNo : JavaPlugin() {
 
     override fun onDisable() {
         dataManager.closeConnection()
-        whitelistManager.closeConnection()
+        //whitelistManager.closeConnection()
     }
 
     private fun registerListeners() {
-        server.pluginManager.registerEvents(WhitelistListener(this), this)
+        //server.pluginManager.registerEvents(WhitelistListener(this), this)
         server.pluginManager.registerEvents(CarlosListener(this), this)
         server.pluginManager.registerEvents(ChatListener(this), this)
     }
