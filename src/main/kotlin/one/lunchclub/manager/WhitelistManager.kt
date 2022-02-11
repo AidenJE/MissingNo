@@ -36,6 +36,21 @@ class WhitelistManager(plugin: MissingNo) : SQLManager(plugin) {
         return false
     }
 
+    fun getWhitelistedPlayers(): Collection<UUID> {
+        val whitelistedPlayers = mutableSetOf<UUID>()
+
+        val data = executeQuery("SELECT uuid FROM player WHERE whitelisted;")
+        if (data != null) {
+            var uuid: UUID
+            while (data.next()) {
+                uuid = UUID.fromString(data.getString("uuid"))
+                whitelistedPlayers.add(uuid)
+            }
+        }
+
+        return whitelistedPlayers
+    }
+
     private fun isPlayerRegistered(uuid: UUID): Boolean {
         val stmt = prepareStatement("SELECT COUNT(1) FROM player WHERE uuid = ?")
         stmt.setString(1, uuid.toString())

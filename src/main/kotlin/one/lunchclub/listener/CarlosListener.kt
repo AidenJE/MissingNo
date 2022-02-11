@@ -25,9 +25,9 @@ class CarlosListener(private val plugin: MissingNo) : Listener {
 
         if (attacker is Player && isCarlos(attacker)) {
             val isPlayerHoldingNothing = attacker.inventory.itemInMainHand.type == Material.AIR
-            val isPlayerAttacking = event.cause == EntityDamageEvent.DamageCause.ENTITY_ATTACK
+            val isPlayerPunching = event.cause == EntityDamageEvent.DamageCause.ENTITY_ATTACK
 
-            if (isPlayerHoldingNothing && isPlayerAttacking) {
+            if (isPlayerHoldingNothing && isPlayerPunching) {
                 event.isCancelled = true
 
                 attacker.world.playSound(attacker.location, Sound.ENTITY_GENERIC_EXPLODE, 50.0f, 1.0f)

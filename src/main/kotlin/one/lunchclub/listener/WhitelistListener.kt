@@ -6,11 +6,9 @@ import org.bukkit.ChatColor
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent
-import java.util.*
-import kotlin.collections.ArrayList
 
 class WhitelistListener(private val plugin: MissingNo) : Listener {
-    private val whitelistCache: ArrayList<UUID> = ArrayList()
+    private val whitelistCache = plugin.whitelistManager.getWhitelistedPlayers().toMutableSet()
 
     @EventHandler
     fun onPlayerLogin(event: AsyncPlayerPreLoginEvent) {
