@@ -17,7 +17,7 @@ class MissingNo : JavaPlugin() {
     override fun onEnable() {
         dataManager = DataManager(this)
         nameManager = NameManager(this)
-        //whitelistManager = WhitelistManager(this)
+        whitelistManager = WhitelistManager(this)
 
         registerListeners()
         registerCommands()
@@ -25,11 +25,11 @@ class MissingNo : JavaPlugin() {
 
     override fun onDisable() {
         dataManager.closeConnection()
-        //whitelistManager.closeConnection()
+        whitelistManager.closeConnection()
     }
 
     private fun registerListeners() {
-        //server.pluginManager.registerEvents(WhitelistListener(this), this)
+        server.pluginManager.registerEvents(WhitelistListener(this), this)
         server.pluginManager.registerEvents(CarlosListener(this), this)
         server.pluginManager.registerEvents(ChatListener(this), this)
     }
