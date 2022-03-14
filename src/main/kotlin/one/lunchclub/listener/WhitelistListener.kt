@@ -14,8 +14,9 @@ class WhitelistListener(private val plugin: MissingNo) : Listener {
     fun onPlayerLogin(event: AsyncPlayerPreLoginEvent) {
         val uuid = event.uniqueId
 
-        if (whitelistCache.contains(uuid))
+        if (whitelistCache.contains(uuid)) {
             return
+        }
 
         if (!plugin.whitelistManager.isPlayerWhitelisted(uuid)) {
             plugin.whitelistManager.registerPlayer(uuid)

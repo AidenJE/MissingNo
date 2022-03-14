@@ -1,7 +1,6 @@
 package one.lunchclub.listener
 
 import one.lunchclub.MissingNo
-import one.lunchclub.util.CurveEntityTask
 import org.bukkit.Material
 import org.bukkit.Particle
 import org.bukkit.Sound
@@ -39,9 +38,6 @@ class CarlosListener(private val plugin: MissingNo) : Listener {
                 // Launch player
                 val knockback = plugin.config.getDouble("carlos.knockback")
                 victim.velocity = attacker.location.direction.normalize().multiply(knockback)
-
-                // Curve player
-                CurveEntityTask(victim, 5).runTaskTimer(plugin, 10L, 10L)
             }
         }
     }

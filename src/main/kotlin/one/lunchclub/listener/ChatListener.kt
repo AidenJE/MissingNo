@@ -15,7 +15,10 @@ class ChatListener(private val plugin: MissingNo) : Listener {
         val message = event.originalMessage()
         event.isCancelled = true
 
-        val name = plugin.nameManager.getName(player.uniqueId) ?: player.name
+        var name = plugin.nameManager.getName(player.uniqueId)
+        if (name == null) {
+            name = player.name // If no custom name is set default to the player's username
+        }
 
         val component = Component.text()
             .append(Component.text("${ChatColor.AQUA}${player.name}")
