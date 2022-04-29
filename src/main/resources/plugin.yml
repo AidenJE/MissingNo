@@ -1,7 +1,7 @@
 name: MissingNo
 description: Lunch Club specific shenanigans.
 author: Aiden
-version: 1.4.2
+version: 1.4.3
 main: one.lunchclub.MissingNo
 api-version: 1.18
 
@@ -10,11 +10,11 @@ commands:
     description: Set your name for the chat listener
     usage: /name <name>
     permission: missingno.name
-  inventory:
-    description: View the inventory of a player
-    usage: /inventory <player>
-    permission: missingno.investigate
   hat:
     description: Equip a hat
     usage: /hat
     permission: missingno.hat
+  togglechairs:
+    description: Toggle SuperChairs chairs.use permission
+    usage: /togglechairs
+    permission: missingno.togglechairs

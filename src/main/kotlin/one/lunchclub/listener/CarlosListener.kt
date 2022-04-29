@@ -37,7 +37,8 @@ class CarlosListener(private val plugin: MissingNo) : Listener {
 
                 // Launch player
                 val knockback = plugin.config.getDouble("carlos.knockback")
-                victim.velocity = attacker.location.direction.normalize().multiply(knockback)
+                val launchVelocity = attacker.location.direction.normalize().multiply(knockback)
+                victim.velocity = launchVelocity.setY(launchVelocity.y + 0.3).multiply(knockback)
             }
         }
     }
