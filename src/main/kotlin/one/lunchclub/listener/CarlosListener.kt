@@ -5,6 +5,9 @@ import one.lunchclub.task.OnePunchTask
 import org.bukkit.Material
 import org.bukkit.Particle
 import org.bukkit.Sound
+import org.bukkit.entity.Entity
+import org.bukkit.entity.Hanging
+import org.bukkit.entity.ItemFrame
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -23,6 +26,8 @@ class CarlosListener(private val plugin: MissingNo) : Listener {
     fun onAttack(event: EntityDamageByEntityEvent) {
         val attacker = event.damager
         val victim = event.entity
+
+        if (victim is Hanging) return // Ignore: Item Frames, Paintings, and Leash Hitches
 
         if (attacker is Player && isCarlos(attacker)) {
             val isPlayerHoldingNothing = attacker.inventory.itemInMainHand.type == Material.AIR

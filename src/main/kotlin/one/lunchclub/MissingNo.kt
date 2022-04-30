@@ -16,7 +16,6 @@ class MissingNo : JavaPlugin() {
     lateinit var nameManager: NameManager
     lateinit var whitelistManager: WhitelistManager
 
-    lateinit var luckpermsApi: LuckPerms
     lateinit var floodgateApi: FloodgateApi
 
     override fun onLoad() {
@@ -42,7 +41,6 @@ class MissingNo : JavaPlugin() {
     }
 
     private fun registerApis() {
-        luckpermsApi = LuckPermsProvider.get()
         floodgateApi = FloodgateApi.getInstance()
     }
 
@@ -55,6 +53,5 @@ class MissingNo : JavaPlugin() {
     private fun registerCommands() {
         getCommand("name")?.setExecutor(NameCommand(this))
         getCommand("hat")?.setExecutor(HatCommand(this))
-        getCommand("togglechairs")?.setExecutor(ChairCommand(this))
     }
 }

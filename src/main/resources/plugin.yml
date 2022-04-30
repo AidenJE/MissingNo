@@ -14,7 +14,3 @@ commands:
     description: Equip a hat
     usage: /hat
     permission: missingno.hat
-  togglechairs:
-    description: Toggle SuperChairs chairs.use permission
-    usage: /togglechairs
-    permission: missingno.togglechairs
