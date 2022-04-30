@@ -6,7 +6,7 @@
 
     <groupId>one.lunchclub</groupId>
     <artifactId>MissingNo</artifactId>
-    <version>1.4.3</version>
+    <version>1.4.5</version>
 
     <properties>
         <kotlin.version>1.5.31</kotlin.version>

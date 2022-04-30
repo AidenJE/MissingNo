@@ -1,6 +1,7 @@
 package one.lunchclub.listener
 
 import one.lunchclub.MissingNo
+import one.lunchclub.task.OnePunchTask
 import org.bukkit.Material
 import org.bukkit.Particle
 import org.bukkit.Sound
@@ -36,9 +37,8 @@ class CarlosListener(private val plugin: MissingNo) : Listener {
                 attacker.world.playSound(attacker.location, Sound.ENTITY_GENERIC_EXPLODE, 50.0f, 1.0f)
 
                 // Launch player
-                val knockback = plugin.config.getDouble("carlos.knockback")
-                val launchVelocity = attacker.location.direction.normalize().multiply(knockback)
-                victim.velocity = launchVelocity.setY(launchVelocity.y + 0.3).multiply(knockback)
+                val direction = attacker.location.direction.normalize()
+                OnePunchTask(plugin, direction, victim).runTaskTimer(plugin, 0L, 5L)
             }
         }
     }

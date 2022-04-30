@@ -11,14 +11,14 @@ import org.bukkit.entity.Player
 class NameCommand(private val plugin: MissingNo) : CommandExecutor {
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
         if (args.isEmpty()) {
-            sender.sendMessage(Component.text("${ChatColor.RED}Correct usage: /name <name>"))
+            sender.sendMessage(Component.text("${plugin.fancyName} ${ChatColor.RED}Correct usage: ${ChatColor.GRAY}/name <name>"))
             return false
         }
 
         if (sender is Player) {
             val name = args.reduce{prev, next -> "$prev $next"}
             plugin.nameManager.logName(sender.uniqueId, name)
-            sender.sendMessage(Component.text("${ChatColor.GREEN}Updated your name to: $name"))
+            sender.sendMessage(Component.text("${plugin.fancyName} ${ChatColor.GREEN}Updated your name to:${ChatColor.WHITE}$name"))
 
             return true
         }
