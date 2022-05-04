@@ -46,6 +46,7 @@ class MissingNo : JavaPlugin() {
         server.pluginManager.registerEvents(WhitelistListener(this), this)
         server.pluginManager.registerEvents(CarlosListener(this), this)
         server.pluginManager.registerEvents(ChatListener(this), this)
+        server.pluginManager.registerEvents(HunterListener(this), this)
     }
 
     private fun registerCommands() {
