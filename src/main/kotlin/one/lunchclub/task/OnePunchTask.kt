@@ -1,8 +1,9 @@
 package one.lunchclub.task
 
 import one.lunchclub.MissingNo
-import org.bukkit.Bukkit
+import org.bukkit.Particle
 import org.bukkit.entity.Entity
+import org.bukkit.entity.Player
 import org.bukkit.scheduler.BukkitRunnable
 import org.bukkit.util.Vector
 
@@ -18,6 +19,10 @@ class OnePunchTask(plugin: MissingNo, direction: Vector, private val victim: Ent
         }
 
         victim.velocity = velocity
+        if (victim is Player) {
+            victim.spawnParticle(Particle.EXPLOSION_NORMAL, victim.location, 1) // Make the multi-hit effect look natural
+        }
+
         counter--
     }
 }

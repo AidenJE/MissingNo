@@ -5,9 +5,7 @@ import one.lunchclub.task.OnePunchTask
 import org.bukkit.Material
 import org.bukkit.Particle
 import org.bukkit.Sound
-import org.bukkit.entity.Entity
 import org.bukkit.entity.Hanging
-import org.bukkit.entity.ItemFrame
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -37,9 +35,9 @@ class CarlosListener(private val plugin: MissingNo) : Listener {
                 event.isCancelled = true
 
                 // Do effects
-                attacker.world.playSound(attacker.location, Sound.ENTITY_GENERIC_EXPLODE, 50.0f, 1.0f)
-                attacker.world.spawnParticle(Particle.EXPLOSION_HUGE, attacker.location, 3)
-                attacker.world.playSound(attacker.location, Sound.ENTITY_GENERIC_EXPLODE, 50.0f, 1.0f)
+                attacker.playSound(attacker.location, Sound.ENTITY_GENERIC_EXPLODE, 1.0f, 1.0f)
+                attacker.spawnParticle(Particle.EXPLOSION_HUGE, attacker.location, 3)
+                attacker.playSound(attacker.location, Sound.ENTITY_GENERIC_EXPLODE, 1.0f, 1.0f)
 
                 // Launch player
                 val direction = attacker.location.direction.normalize()

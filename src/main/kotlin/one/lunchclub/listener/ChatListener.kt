@@ -2,6 +2,7 @@ package one.lunchclub.listener
 
 import io.papermc.paper.event.player.AsyncChatEvent
 import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.TextReplacementConfig
 import net.kyori.adventure.text.event.HoverEvent
 import one.lunchclub.MissingNo
 import org.bukkit.ChatColor
@@ -12,8 +13,16 @@ class ChatListener(private val plugin: MissingNo) : Listener {
     @EventHandler
     fun onChat(event: AsyncChatEvent) {
         val player = event.player
-        val message = event.originalMessage()
+        var message = event.message()
         event.isCancelled = true
+
+        // Remove name from original message
+        val messageFilter = TextReplacementConfig.builder()
+            .match("<${player.name}> ")
+            .replacement("")
+            .once()
+            .build()
+        message = message.replaceText(messageFilter)
 
         // If no custom name is set default to the player's username
         var name = plugin.nameManager.getName(player.uniqueId)

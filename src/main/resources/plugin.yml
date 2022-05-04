@@ -1,7 +1,7 @@
 name: MissingNo
 description: Lunch Club specific shenanigans.
 author: Aiden
-version: 1.4.5
+version: 1.4.6
 main: one.lunchclub.MissingNo
 api-version: 1.18
 

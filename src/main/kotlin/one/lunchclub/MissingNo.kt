@@ -1,7 +1,5 @@
 package one.lunchclub
 
-import net.luckperms.api.LuckPerms
-import net.luckperms.api.LuckPermsProvider
 import one.lunchclub.command.*
 import one.lunchclub.listener.*
 import one.lunchclub.manager.*
