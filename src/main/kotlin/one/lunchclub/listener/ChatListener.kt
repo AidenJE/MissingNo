@@ -39,7 +39,7 @@ class ChatListener(private val plugin: MissingNo) : Listener {
         }
 
         // Create modified chat message
-        val component = Component.text()
+        val newMessage = Component.text()
             .append(Component.text("${highlightColor}${player.name}")
                 .hoverEvent(HoverEvent.showText(Component.text("${ChatColor.YELLOW}${name}"))))
             .append(Component.text("${ChatColor.RESET}: "))
@@ -48,6 +48,6 @@ class ChatListener(private val plugin: MissingNo) : Listener {
 
         // Send modified chat message
         for (viewer in event.viewers())
-            viewer.sendMessage(component)
+            viewer.sendMessage(newMessage)
     }
 }

@@ -30,6 +30,7 @@ class HunterListener(private val plugin: MissingNo) : Listener {
         if (projectile is Snowball && thrower is Player && isHunter(thrower)) {
             // Send laser
             if (victim is Damageable) {
+                if (victim is Player && isHunter(victim)) return
                 thrower.sendMessage(Component.text("${plugin.fancyName}${ChatColor.RED} Space lasers online... Target will be eliminated in 5 seconds."))
                 LaserTask(plugin, victim).runTaskLater(plugin, 20L * 5L)
             }
